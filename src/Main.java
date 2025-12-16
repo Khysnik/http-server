@@ -1,8 +1,11 @@
 import java.io.*;
 import java.net.*;
+import java.util.HashMap;
 
-void main() throws IOException, InterruptedException {
+void main() throws IOException {
 
+    HashMap<String, String> headers = new HashMap<>();
+            
     ServerSocket serverSocket = new ServerSocket(42069);
     System.out.println("Server is running and waiting for client connection...");
     while (true) {
@@ -14,7 +17,6 @@ void main() throws IOException, InterruptedException {
 
         OutputStream out = clientSocket.getOutputStream();
 
-        // --- START timing AFTER accept ---
         final long startNs = System.nanoTime();
 
         String requestLine = in.readLine();
@@ -25,7 +27,7 @@ void main() throws IOException, InterruptedException {
 
         String line;
         while ((line = in.readLine()) != null && !line.isEmpty()) {
-            // TODO: kill myself
+            headers.put(line.split(" ")[0], line.split(" ")[1]);
         }
 
         String[] reqHead = requestLine.split(" ");
